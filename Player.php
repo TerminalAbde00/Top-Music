@@ -108,7 +108,7 @@
 <?php // show flag button only when reports < 5 ?>
 <?php if ($reports < 5): ?>
   <div id="show" class="segnala">
-    <i style="font-size:18px;color:#da3434;padding:3px;" class="fa fa-flag" aria-hidden="true"></i>
+    <i class="fa fa-flag flag-icon" aria-hidden="true"></i>
   </div>
 <?php endif; ?>
   <?php
@@ -117,23 +117,22 @@
   $parts = explode('.', $FILE);
   $estensioneF = strtolower(array_pop($parts));
 
-  echo '<div class="black"></div>';
-  echo '<div class="BG"></div>';
-
-  if (in_array($estensioneF, ['mp4', 'm4v'])) {
-    echo '<video autoplay loop playsinline id="myVideo">';
-    echo '<source src="VID/'.htmlspecialchars($song['VID']).'" type="video/mp4">';
-    echo '<div class="PS"></div>';
-    echo '</video>';
-  } elseif (in_array($estensioneF, ['mp3', 'm4a'])) {
-    echo '<video autoplay loop playsinline id="myVideo2">';
-    echo '<source src="VID/loop/loop.mp4" type="video/mp4">';
-    echo '<div class="PS"></div>';
-    echo '</video>';
-    echo '<audio src="VID/'.htmlspecialchars($song['VID']).'" autoplay loop id="myVideo"></audio>';
-  }
-
   ?>
+  <div class="black"></div>
+  <div class="BG"></div>
+
+  <?php if (in_array($estensioneF, ['mp4', 'm4v'])): ?>
+    <video autoplay loop playsinline id="myVideo">
+      <source src="VID/<?= htmlspecialchars($song['VID']) ?>" type="video/mp4">
+      <div class="PS"></div>
+    </video>
+  <?php elseif (in_array($estensioneF, ['mp3', 'm4a'])): ?>
+    <video autoplay loop playsinline id="myVideo2">
+      <source src="VID/loop/loop.mp4" type="video/mp4">
+      <div class="PS"></div>
+    </video>
+    <audio src="VID/<?= htmlspecialchars($song['VID']) ?>" autoplay loop id="myVideo"></audio>
+  <?php endif; ?>
   <div>
     <div class="box">
       <?php if ($reports >= 5): ?>
@@ -154,7 +153,7 @@
     </div>
   </div>
 
-  <div class="background" style="display:none;">
+  <div class="background">
     <div class="container">
       <div class="screen">
         <div class="screen-body">
@@ -175,11 +174,11 @@
                 </div>
 
                 <div class="app-form-group message">
-                  <input class="app-form-control" name="id" value="<?= (int)$song['Id'] ?>" style="display:none;">
+                  <input class="app-form-control hidden-input" name="id" value="<?= (int)$song['Id'] ?>">
                   <input class="app-form-control" placeholder="Descrivi il problema" name="Messaggio" required>
                 </div>
                 <div class="app-form-group buttons">
-                  <p style="display:inline;margin-right: 5px;" class="app-form-button">ANNULLA</p>
+                  <p class="app-form-button cancel-button">ANNULLA</p>
                   <input type="submit" class="app-form-button" value="SEGNALA" name="submit">
                 </div>
               </form>

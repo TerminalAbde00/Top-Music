@@ -90,9 +90,29 @@ html,body {
 }
 #myVideo2 {
     position:fixed;
-    z-index: 0;
+    z-index: 1;
     filter:blur(4px);
     transform: scale(2);
+}
+
+/* Stili spostati da Player.php */
+.flag-icon {
+    font-size: 18px;
+    color: #da3434;
+    padding: 3px;
+}
+
+.background {
+    display: none;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.cancel-button {
+    display: inline;
+    margin-right: 5px;
 }
 @media (min-aspect-ratio: 16/9) {
     #myVideo {
