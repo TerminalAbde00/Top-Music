@@ -1,9 +1,4 @@
 <?php
-/**
- * TOP MUSIC - Homepage
- * Mostra la lista delle canzoni con funzionalità di riproduzione e preferiti
- */
-
 // Inizializzazione
 session_start();
 $isLoggedIn = isset($_SESSION["id"]);
@@ -21,16 +16,10 @@ if($myDB->connect_errno) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>TOP MUSIC - Discover new music everyday</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" href="IMG/PAGINA/top.png">
-    
-    <!-- Styles -->
+    <title>TOP MUSIC - Discover new music everyday</title>    
+    <link rel="icon" href="IMG/PAGINA/top.png">    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="CSS/style_HomeOk.css">
-    
-    <!-- Scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
     <script src="JS/scriptIndex.js" defer></script>
 </head>
