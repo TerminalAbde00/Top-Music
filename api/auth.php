@@ -67,7 +67,7 @@ if ($login_success) {
     header("Location: ../upload.php");
 } else {
     $_SESSION["errore_login"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
 }
 exit();
 ?>

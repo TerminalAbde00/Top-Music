@@ -1,66 +1,118 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300);
-*{
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+:root {
+  --primary-color: #4CAF50;
+  --primary-hover: #43A047;
+  --text-color: #333;
+  --error-color: #ff0303;
+  --bg-input: #f2f2f2;
+  --bg-form: #FFFFFF;
+  --transition: all 0.3s ease;
+}
+
+* {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(-135deg, #3a3a3a, #1c1d20);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-page {
-  width: 360px;
-  padding: 8% 0 0;
+  width: 100%;
+  max-width: 360px;
+  padding: 20px;
   margin: auto;
 }
+
 .form {
   position: relative;
-  z-index: 1;
-  background: #FFFFFF;
-  max-width: 360px;
-  margin: 0 auto 100px;
+  background: var(--bg-form);
   padding: 45px;
   text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   border-radius: 30px;
-  
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
 }
+
 .form input {
-  font-family: "Roboto", sans-serif;
-  outline: 0;
-  background: #f2f2f2;
+  font-family: inherit;
   width: 100%;
-  border: 0;
-  margin: 0 0 15px;
   padding: 15px;
-  box-sizing: border-box;
+  margin-bottom: 15px;
+  background: var(--bg-input);
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
+  transition: var(--transition);
+}
+
+.form input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 .form button {
-  font-family: "Roboto", sans-serif;
-  text-transform: uppercase;
-  outline: 0;
-  background: #4CAF50;
   width: 100%;
-  border: 0;
   padding: 15px;
-  color: #FFFFFF;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 14px;
-  -webkit-transition: all 0.3 ease;
-  transition: all 0.3 ease;
+  font-weight: 500;
+  text-transform: uppercase;
   cursor: pointer;
+  transition: var(--transition);
 }
-.form button:hover,.form button:active,.form button:focus {
-  background: #43A047;
+
+.form button:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
 }
+
 .form .message {
-  margin: 15px 0 0;
+  margin-top: 20px;
   color: #b3b3b3;
-  font-size: 12px;
+  font-size: 14px;
 }
+
 .form .message a {
-  color: #4CAF50;
+  color: var(--primary-color);
   text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
 }
+
+.form .message a:hover {
+  color: var(--primary-hover);
+}
+
 .form .register-form {
   display: none;
+}
+
+.form-title {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 25px;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-top: 12px;
+  font-weight: 500;
 }
 .container {
   position: relative;
@@ -92,25 +144,47 @@
   color: #000000;
   text-decoration: none;
 }
-.container .info span .fa {
-  color: #EF3B3A;
+.back-link {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 33px;
+  z-index: 7;
 }
-body {
-  background: #76b852; /* fallback for old browsers */
-  background: -webkit-linear-gradient(-135deg, #3a3a3a, #1c1d20);
-  background: -moz-linear-gradient(-135deg, #3a3a3a, #1c1d20);
-  background: -o-linear-gradient(-135deg, #3a3a3a, #1c1d20);
-  background: linear-gradient(-135deg, #3a3a3a, #1c1d20);
-  font-family: "Roboto", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;}
-#backback:hover{
-transform:scale(1.2);
+
+.back-icon {
+  width: 30px;
+  filter: invert(1);
+  transition: var(--transition);
+}
+
+.back-icon:hover {
+  transform: scale(1.2);
 }
 @media screen and (max-width: 520px) {
   .login-page {
-      transform: scale(2.5);
-      margin-top: 448px;  
-}
-
+    padding: 10px;
+  }
+  
+  .form {
+    padding: 30px 20px;
+  }
+  
+  .form-title {
+    font-size: 22px;
+  }
+  
+  .form input,
+  .form button {
+    font-size: 16px;
+    padding: 12px;
+  }
+  
+  .back-link {
+    margin: 20px;
+  }
+  
+  .back-icon {
+    width: 25px;
+  }
 }
