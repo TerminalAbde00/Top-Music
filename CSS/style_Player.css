@@ -35,6 +35,18 @@
 border-radius: 15px;
 }
 
+/* Back button base style (replaces inline styles) */
+#backback {
+    position: absolute;
+    left: 0;
+    margin: 33px;
+    z-index: 7;
+}
+#backback img {
+    width: 30px;
+    transition: transform 250ms;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 1rem;

@@ -12,141 +12,192 @@
   <?php
   include("config.php");
   $myDB = new mysqli(SERVER, UTENTE, PASSWORD, DATABASE);
-  if($myDB->connect_errno){
-      echo "Errore di connessione";
-      exit();
+  if ($myDB->connect_errno) {
+    echo "Errore di connessione";
+    exit();
   }
 
-  $Id_C = isset($_GET['Id']) ? (int)$_GET['Id'] : 0; // ensure integer to avoid SQL errors / injections
-  $risultato=$myDB->query("SELECT Id, NomeCanzone, Autore, IMG FROM canzoni WHERE Id = $Id_C");
+  // validate id
+  $Id_C = isset($_GET['Id']) ? (int)$_GET['Id'] : 0;
+  if ($Id_C <= 0) {
+    echo "ID non valido.";
+    exit();
+  }
 
-      while ($row=$risultato->fetch_assoc()) {
-          echo '<meta charset="utf-8">';
-          echo '<link rel="stylesheet" href="CSS/style_Player.css">';
-          echo '<link rel="icon" href="IMG/COVER/'.$row["IMG"].'">';
-          echo '<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">';
-          echo '<title> '.$row["NomeCanzone"].' - '.$row["Autore"].'</title>';
+  // fetch song using prepared statement (with robust fallbacks)
+  $song = null;
+  $sql = "SELECT Id, NomeCanzone, Autore, IMG, VID FROM canzoni WHERE Id = ? LIMIT 1";
+  $stmt = $myDB->prepare($sql);
+  if ($stmt === false) {
+    // prepare failed (maybe driver or SQL); fallback to direct query
+    error_log("[Player.php] prepare() failed: " . $myDB->error);
+    $escapedId = (int)$Id_C;
+    $res = $myDB->query("SELECT Id, NomeCanzone, Autore, IMG, VID FROM canzoni WHERE Id = $escapedId LIMIT 1");
+    $song = $res ? $res->fetch_assoc() : null;
+  } else {
+    if (! $stmt->bind_param('i', $Id_C)) {
+      error_log("[Player.php] bind_param() failed: " . $stmt->error);
+    }
+    $stmt->execute();
+    // prefer get_result when available (requires mysqlnd), otherwise use bind_result
+    if (method_exists($stmt, 'get_result')) {
+      $res = $stmt->get_result();
+      $song = $res ? $res->fetch_assoc() : null;
+    } else {
+      // fallback: bind_result
+      $stmt->bind_result($sid, $sname, $sauthor, $simg, $svid);
+      if ($stmt->fetch()) {
+        $song = [
+          'Id' => $sid,
+          'NomeCanzone' => $sname,
+          'Autore' => $sauthor,
+          'IMG' => $simg,
+          'VID' => $svid,
+        ];
       }
-   ?>
+    }
+    $stmt->close();
+  }
+
+  if (!$song) {
+    echo "Canzone non trovata.";
+    exit();
+  }
+
+  // count reports (with fallback if prepare/get_result not available)
+  $reports = 0;
+  $sql2 = "SELECT COUNT(*) AS cnt FROM segnalazioni WHERE fkCanzone = ?";
+  $stmt2 = $myDB->prepare($sql2);
+  if ($stmt2 === false) {
+    error_log("[Player.php] prepare() for reports failed: " . $myDB->error);
+    $res2 = $myDB->query("SELECT COUNT(*) AS cnt FROM segnalazioni WHERE fkCanzone = " . (int)$Id_C);
+    if ($res2 && ($r = $res2->fetch_assoc())) {
+      $reports = (int)$r['cnt'];
+    }
+  } else {
+    $stmt2->bind_param('i', $Id_C);
+    $stmt2->execute();
+    if (method_exists($stmt2, 'get_result')) {
+      $res2 = $stmt2->get_result();
+      $reports = ($res2 && ($r = $res2->fetch_assoc())) ? (int)$r['cnt'] : 0;
+    } else {
+      $stmt2->bind_result($cnt);
+      if ($stmt2->fetch()) {
+        $reports = (int)$cnt;
+      } else {
+        $reports = 0;
+      }
+    }
+    $stmt2->close();
+  }
+
+  // output meta tags using fetched data
+  ?>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="CSS/style_Player.css">
+  <link rel="icon" href="IMG/COVER/<?= htmlspecialchars($song['IMG']) ?>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title><?= htmlspecialchars($song['NomeCanzone']) ?> - <?= htmlspecialchars($song['Autore']) ?></title>
+  <?php
+  
+  ?>
 </head>
 
 <body>
-<a href="/"><img src="IMG/PAGINA/ar.png" id="backback" style="transition: transform 250ms;width: 30px;z-index:7;margin: 33px;position: absolute;" class="back"></a>
-<?php
-// get number of reports for this song (casted id used)
-$Preferiti = $myDB->query("SELECT * FROM segnalazioni WHERE fkCanzone = {$Id_C}");
-if ($Preferiti && $Preferiti->num_rows < 5) {
-    echo '<div id="show" class="segnala">
-                 <i style="font-size:18px;color:#da3434;padding:3px;" class="fa fa-flag" aria-hidden="true"></i>
-                      </div>';
-}
-
-?>
-  <?php
-  $Id_C = $_GET['Id'];
-  $myDB = new mysqli(SERVER, UTENTE, PASSWORD, DATABASE);
-  if($myDB->connect_errno){
-      echo "Errore di connessione";
-      exit();
-  }
-  $risultato=$myDB->query("SELECT Id, NomeCanzone, Autore, IMG, VID FROM canzoni WHERE Id = $Id_C");
-      while ($row=$risultato->fetch_assoc()) {
-
-          echo  '<div class="black">';
-          echo ' </div>';
-          echo  '<div class="BG">';
-          echo ' </div>';
-          $FILE = $row["VID"];
-          list($nomeF, $nomeF2, $estensioneF) = explode(".", $FILE);
-          if ($estensioneF=="mp4" OR $estensioneF=="m4v") {
-            echo '<video autoplay loop playsinline id="myVideo">';
-            echo '<source src="VID/'.$row["VID"].'"  type="video/mp4">';
-            echo '<div class="PS"></div>';
-            echo '</video>';
-          }
-          if ($estensioneF=="mp3" OR $estensioneF=="m4a") {
-            echo '<video autoplay loop playsinline id="myVideo2"">';
-            $rand = rand(0,1);
-            if ($rand == 0) {
-              echo '<source src="VID/loop/loop.mp4"  type="video/mp4">';
-            }
-            if ($rand == 1) {
-                echo '<source src="VID/loop/loop.mp4"  type="video/mp4">';
-            }
-            
-
-
-            echo '<div class="PS"></div>';
-            echo '</video>';
-            echo '<audio src="VID/'.$row["VID"].'" autoplay loop id="myVideo"></audio>';
-          }
-
-          echo '<div>';
-          echo '<div class="box">';
-    if ($Preferiti && $Preferiti->num_rows >= 5){
-      echo '<img src="IMG/PAGINA/rev.png" style="width: 87px;z-index:7;position: absolute;right: -27px;top: -28px;transform: rotate(38deg);">';
-    }
-          echo '<div class="cover" >';
-          echo '<img id="angoli" src="IMG/COVER/'.$row["IMG"].'" width="200" height="200">';
-          echo '</div>';
-          echo '<div class="text">';
-          echo '<p><strong style="font-family: Arial;text-transform: capitalize;">'.$row["NomeCanzone"].'</strong></p>';
-          echo '</div>';
-          echo '<div class="text">';
-          echo '<p style="font-style: italic;text-transform: capitalize;">'.$row["Autore"].'</p>';
-          echo '</div>';
-          echo '<div >';
-          echo '<button id="myBtn" onclick="myFunction()">Pause</button>';
-          echo '</div></div></div>';
-
-
-          echo '<div class="background" style="display:none;">
-            <div class="container">
-              <div class="screen">
-                <div class="screen-body">
-                  <div class="screen-body-item left">
-                    <div class="app-title">
-                      <span>SEGNALA</span>
-                      <span>PROBLEMA</span>
-                    </div>
-                  </div>
-                  <div class="screen-body-item">
-                    <div class="app-form">
-                      <form>
-                        <div class="app-form-group">
-                          <input class="app-form-control" placeholder="Nome della canzone" value="'.$row["NomeCanzone"].'" readonly>
-                        </div>
-                        <div class="app-form-group">
-                          <input class="app-form-control" placeholder="Autore" value="'.$row["Autore"].'" readonly>
-                        </div>
-
-                        <div class="app-form-group message">
-                          <input class="app-form-control" name="id" value="'.$row["Id"].'" style="display:none;">
-                          <input class="app-form-control" placeholder="Descrivi il problema" name="Messaggio" required>
-                        </div>
-                        <div class="app-form-group buttons">
-                          <p style="display:inline;margin-right: 5px;" class="app-form-button">ANNULLA</p>
-                          <input type="submit" class="app-form-button" value="SEGNALA" name="submit">
-                        </div>
-                      </form>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>';
-
-      }
-
-   ?>
-   <div class="progress">
-  <span class="start"></span>
-  <div class="progress-bar">
-    <div class="now"></div>
+<a href="/" id="backback" class="back"><img src="IMG/PAGINA/ar.png" alt="Indietro"></a>
+<?php // show flag button only when reports < 5 ?>
+<?php if ($reports < 5): ?>
+  <div id="show" class="segnala">
+    <i style="font-size:18px;color:#da3434;padding:3px;" class="fa fa-flag" aria-hidden="true"></i>
   </div>
-  <span class="end"></span>
- </div>
+<?php endif; ?>
+  <?php
+  // render using $song and $reports (already fetched)
+  $FILE = $song['VID'];
+  $parts = explode('.', $FILE);
+  $estensioneF = strtolower(array_pop($parts));
+
+  echo '<div class="black"></div>';
+  echo '<div class="BG"></div>';
+
+  if (in_array($estensioneF, ['mp4', 'm4v'])) {
+    echo '<video autoplay loop playsinline id="myVideo">';
+    echo '<source src="VID/'.htmlspecialchars($song['VID']).'" type="video/mp4">';
+    echo '<div class="PS"></div>';
+    echo '</video>';
+  } elseif (in_array($estensioneF, ['mp3', 'm4a'])) {
+    echo '<video autoplay loop playsinline id="myVideo2">';
+    echo '<source src="VID/loop/loop.mp4" type="video/mp4">';
+    echo '<div class="PS"></div>';
+    echo '</video>';
+    echo '<audio src="VID/'.htmlspecialchars($song['VID']).'" autoplay loop id="myVideo"></audio>';
+  }
+
+  ?>
+  <div>
+    <div class="box">
+      <?php if ($reports >= 5): ?>
+        <img src="IMG/PAGINA/rev.png" class="rev-badge" alt="Badge">
+      <?php endif; ?>
+      <div class="cover">
+        <img id="angoli" src="IMG/COVER/<?= htmlspecialchars($song['IMG']) ?>" width="200" height="200" alt="Cover">
+      </div>
+      <div class="text">
+        <p><strong><?= htmlspecialchars($song['NomeCanzone']) ?></strong></p>
+      </div>
+      <div class="text">
+        <p class="author"><?= htmlspecialchars($song['Autore']) ?></p>
+      </div>
+      <div>
+        <button id="myBtn" onclick="myFunction()">Pause</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="background" style="display:none;">
+    <div class="container">
+      <div class="screen">
+        <div class="screen-body">
+          <div class="screen-body-item left">
+            <div class="app-title">
+              <span>SEGNALA</span>
+              <span>PROBLEMA</span>
+            </div>
+          </div>
+          <div class="screen-body-item">
+            <div class="app-form">
+              <form>
+                <div class="app-form-group">
+                  <input class="app-form-control" placeholder="Nome della canzone" value="<?= htmlspecialchars($song['NomeCanzone']) ?>" readonly>
+                </div>
+                <div class="app-form-group">
+                  <input class="app-form-control" placeholder="Autore" value="<?= htmlspecialchars($song['Autore']) ?>" readonly>
+                </div>
+
+                <div class="app-form-group message">
+                  <input class="app-form-control" name="id" value="<?= (int)$song['Id'] ?>" style="display:none;">
+                  <input class="app-form-control" placeholder="Descrivi il problema" name="Messaggio" required>
+                </div>
+                <div class="app-form-group buttons">
+                  <p style="display:inline;margin-right: 5px;" class="app-form-button">ANNULLA</p>
+                  <input type="submit" class="app-form-button" value="SEGNALA" name="submit">
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress">
+    <span class="start"></span>
+    <div class="progress-bar">
+      <div class="now"></div>
+    </div>
+    <span class="end"></span>
+  </div>
    <!-- Scripts spostati in JS/scriptPlayer.js -->
   </body>
 </html>
