@@ -1,0 +1,121 @@
+// Gestione form di segnalazione
+$(document).ready(function(){
+    $(".app-form-button").click(function(){
+        $(".background").hide();
+    });
+    $("#show").click(function(){
+        $(".background").show();
+    });
+
+    // Gestione submit form di segnalazione
+    $("form").on("submit", function(e) {
+        var dataString = $(this).serialize();
+        
+        $.ajax({
+            type: "POST",
+            url: "segnala.php",
+            data: dataString,
+            success: function () {
+                alert('Grazie della segnalazione');
+                $("#show").css("display", "none");
+                $("#show").removeClass("segnala");
+                $(".segnala").hide();
+            }
+        });
+        
+        e.preventDefault();
+    });
+
+    // Gestione player audio/video
+    const audio = document.getElementById('myVideo');
+    const progressBar = document.querySelector('.progress-bar');
+    const now = document.querySelector('.now');
+
+    if (audio && progressBar && now) {
+        function conversion(value) {
+            let minute = Math.floor(value / 60);
+            minute = minute.toString().length === 1 ? ('0' + minute) : minute;
+            let second = Math.round(value % 60);
+            second = second.toString().length === 1 ? ('0' + second) : second;
+            return `${minute}:${second}`;
+        }
+
+        progressBar.addEventListener('click', function (event) {
+            let coordStart = this.getBoundingClientRect().left;
+            let coordEnd = event.pageX;
+            let p = (coordEnd - coordStart) / this.offsetWidth;
+            now.style.width = p.toFixed(3) * 100 + '%';
+            audio.currentTime = p * audio.duration;
+        });
+
+        setInterval(() => {
+            if (audio.duration) {
+                now.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+            }
+        }, 1000);
+    }
+
+    // Funzione play/pause
+    window.myFunction = function() {
+        var video = document.getElementById("myVideo");
+        var video2 = document.getElementById("myVideo2");
+        var btn = document.getElementById("myBtn");
+        
+        if (video) {
+            if (video2) {
+                // Caso MP3 con video di background
+                if (video.paused) {
+                    video.play();
+                    video2.play();
+                    btn.innerHTML = "Pause";
+                } else {
+                    video.pause();
+                    video2.pause();
+                    btn.innerHTML = "Play";
+                }
+            } else {
+                // Caso video normale
+                if (video.paused) {
+                    video.play();
+                    btn.innerHTML = "Pause";
+                } else {
+                    video.pause();
+                    btn.innerHTML = "Play";
+                }
+            }
+        }
+    };
+});
+
+// Gestione UI per video MP4
+var timedelay = 1;
+var _delay;
+
+function delayCheck() {
+    if (timedelay == 5) {
+        $('.box').fadeOut();
+        $('.progress').fadeOut();
+        $('.segnala').fadeOut();
+        $('.back').fadeOut();
+        $('#myVideo').css("filter", "none");
+        $('#myVideo').css("transform", "scale(1)");
+        timedelay = 1;
+    }
+    timedelay = timedelay + 1;
+}
+
+$(document).mousemove(function() {
+    $('.progress').fadeIn();
+    $('.segnala').fadeIn();
+    $('.box').fadeIn();
+    $('.back').fadeIn();
+    $('#myVideo').css("filter", "blur(4px)");
+    $('#myVideo').css("transform", "scale(2)");
+    
+    timedelay = 1;
+    clearInterval(_delay);
+    _delay = setInterval(delayCheck, 700);
+});
+
+// Avvia delay timer al caricamento pagina
+_delay = setInterval(delayCheck, 800);
