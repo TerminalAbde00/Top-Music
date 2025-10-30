@@ -2,61 +2,7 @@
 <html>
 
 <head>
-  <style media="screen">
-    * {
-   margin: 0;
-   padding: 0;
- }
-
- .progress-bar {
-   bottom: -20px;
-   position: fixed;
-   width: 100%;
-   height: 25px;
-   background-color: #eeeeee80;
-   vertical-align: 2px;
-   border-radius: 3px;
-   cursor: pointer;
-  transition: transform 250ms;
-  z-index:9;
- }
- .progress-bar:hover {
-   transform: translateY(-10px);
- }
-
- .now {
-   position: absolute;
-   left: 0;
-   display: inline-block;
-   height: 25px;
-   width: 0%;
-   background-color: #f7b42c;
-   background: linear-gradient(315deg, #f7b42c 0%, #fc575e 74%);
- }
-
-
-  </style>
-  <style>
-  .segnala{
-    position:absolute;
-    height:30px;
-    width:30px;
-    border-radius:100%;
-    border:solid 3px;
-    color:#da3434;
-    z-index:7;
-    margin: 33px;
-    right:0;
-    cursor: pointer;
-    transition: transform 250ms;
-  }
-  .segnala:hover{
-  transform:scale(1.2);  
-  }
-  #backback:hover{
-    transform:scale(1.2);  
-  }
-  </style>
+  <!-- Styles moved to CSS/style_Player.css -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="JS/scriptPlayer.js"></script>
@@ -71,7 +17,7 @@
       exit();
   }
 
-  $Id_C = $_GET['Id'];
+  $Id_C = isset($_GET['Id']) ? (int)$_GET['Id'] : 0; // ensure integer to avoid SQL errors / injections
   $risultato=$myDB->query("SELECT Id, NomeCanzone, Autore, IMG FROM canzoni WHERE Id = $Id_C");
 
       while ($row=$risultato->fetch_assoc()) {
@@ -87,12 +33,13 @@
 <body>
 <a href="/"><img src="IMG/PAGINA/ar.png" id="backback" style="transition: transform 250ms;width: 30px;z-index:7;margin: 33px;position: absolute;" class="back"></a>
 <?php
-$Preferiti = mysqli_query($myDB, "SELECT * FROM segnalazioni WHERE fkCanzone= ".$Id_C);
-  if (mysqli_num_rows($Preferiti) < 5){
-      echo '<div id="show" class="segnala">
-                   <i style="font-size:18px;color:#da3434;padding:3px;"class="fa fa-flag" aria-hidden="true"></i>
-                        </div>';
-  }
+// get number of reports for this song (casted id used)
+$Preferiti = $myDB->query("SELECT * FROM segnalazioni WHERE fkCanzone = {$Id_C}");
+if ($Preferiti && $Preferiti->num_rows < 5) {
+    echo '<div id="show" class="segnala">
+                 <i style="font-size:18px;color:#da3434;padding:3px;" class="fa fa-flag" aria-hidden="true"></i>
+                      </div>';
+}
 
 ?>
   <?php
@@ -136,9 +83,9 @@ $Preferiti = mysqli_query($myDB, "SELECT * FROM segnalazioni WHERE fkCanzone= ".
 
           echo '<div>';
           echo '<div class="box">';
-          if (mysqli_num_rows($Preferiti) >= 5){
-               echo '<img src="IMG/PAGINA/rev.png" style="width: 87px;z-index:7;position: absolute;right: -27px;top: -28px;transform: rotate(38deg);">';
-          }
+    if ($Preferiti && $Preferiti->num_rows >= 5){
+      echo '<img src="IMG/PAGINA/rev.png" style="width: 87px;z-index:7;position: absolute;right: -27px;top: -28px;transform: rotate(38deg);">';
+    }
           echo '<div class="cover" >';
           echo '<img id="angoli" src="IMG/COVER/'.$row["IMG"].'" width="200" height="200">';
           echo '</div>';
