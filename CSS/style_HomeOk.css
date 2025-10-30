@@ -297,3 +297,9 @@ button:hover {
             width: 28px;
             background: gold;
           }
+
+/* Space reserved for the fixed top navigation bar
+   Adjust the value below if header height changes. */
+#app {
+  padding-top: 48px; /* header 72px + 18px gap (approx. 3 <br> equivalent) */
+}
