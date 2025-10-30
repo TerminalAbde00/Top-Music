@@ -92,30 +92,52 @@ var timedelay = 1;
 var _delay;
 
 function delayCheck() {
-    if (timedelay == 5) {
-        $('.box').fadeOut();
-        $('.progress').fadeOut();
-        $('.segnala').fadeOut();
-        $('.back').fadeOut();
-        $('#myVideo').css("filter", "none");
-        $('#myVideo').css("transform", "scale(1)");
-        timedelay = 1;
+    // Verifichiamo se è un video MP4 (no #myVideo2 = non è MP3)
+    if (!document.getElementById('myVideo2')) {
+        if (timedelay == 5) {
+            // Nascondi tutti gli elementi con animazione
+            $('.box, .progress, .segnala, .back').css({
+                'opacity': '0',
+                'transition': 'opacity 0.3s ease-in-out'
+            }).one('transitionend', function() {
+                $(this).css('display', 'none');
+            });
+            
+            $('#myVideo').css({
+                "filter": "none",
+                "transform": "scale(1)",
+                "transition": "all 0.3s ease-in-out"
+            });
+            timedelay = 1;
+        }
+        timedelay = timedelay + 1;
     }
-    timedelay = timedelay + 1;
 }
 
 $(document).mousemove(function() {
-    $('.progress').fadeIn();
-    $('.segnala').fadeIn();
-    $('.box').fadeIn();
-    $('.back').fadeIn();
-    $('#myVideo').css("filter", "blur(4px)");
-    $('#myVideo').css("transform", "scale(2)");
-    
-    timedelay = 1;
-    clearInterval(_delay);
-    _delay = setInterval(delayCheck, 700);
+    // Verifichiamo se è un video MP4
+    if (!document.getElementById('myVideo2')) {
+        // Mostra tutti gli elementi con animazione
+        $('.progress, .segnala, .box, .back').css({
+            'opacity': '1',
+            'transition': 'opacity 0.3s ease-in-out',
+            'display': 'block'
+        });
+        $('#myVideo').css({
+            "filter": "blur(4px)",
+            "transform": "scale(2)",
+            "transition": "all 0.3s ease-in-out"
+        });
+        
+        timedelay = 1;
+        clearInterval(_delay);
+        _delay = setInterval(delayCheck, 700);
+    }
 });
 
-// Avvia delay timer al caricamento pagina
-_delay = setInterval(delayCheck, 800);
+// Avvia delay timer al caricamento pagina solo se è un video MP4
+$(document).ready(function() {
+    if (!document.getElementById('myVideo2')) {
+        _delay = setInterval(delayCheck, 800);
+    }
+});
