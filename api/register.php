@@ -16,7 +16,7 @@ if ($conn->connect_errno) {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ if (!isset($_POST['usr']) || !isset($_POST['psw']) || !isset($_POST['nme'])) {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -38,7 +38,7 @@ if (empty($username) || empty($password) || empty($nome)) {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -55,7 +55,7 @@ if (!$stmt) {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -71,7 +71,7 @@ if ($existing_username !== null) {
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
     mysqli_close($conn);
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -82,7 +82,7 @@ if (!$stmt) {
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
     mysqli_close($conn);
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -97,13 +97,13 @@ if ($stmt->execute()) {
     $user_id = $conn->insert_id;
     $_SESSION["id"] = $user_id;
     $_SESSION["nome"] = $nome;
-    
-    header("Location: upload.php");
+
+    header("Location: ../upload.php");
 } else {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: login.php");
+    header("Location: ../login.php");
 }
 
 $stmt->close();
