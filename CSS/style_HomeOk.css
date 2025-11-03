@@ -167,6 +167,7 @@ button:hover {
 			    position: absolute;
 			    margin-top: 4px;
 			    width: 28px;
+          height: 28px;
 			    z-index: 3;
 			    margin-left: 209px;
           transition: transform 250ms;
