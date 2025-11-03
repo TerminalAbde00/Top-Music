@@ -254,8 +254,8 @@ if(!isset($_SESSION["id"])){
         <a href="/">
             <img src="IMG/PAGINA/ar.png" alt="Torna alla home">
         </a>
-        <h2 style="color: white;">Il tuo profilo</h2>
-        <a href="logout.script.php">
+        <h2 style="color: white;">Area Personale</h2>
+        <a href="/api/logout.php">
             <img src="IMG/PAGINA/logout.png" alt="Logout">
         </a>
     </div>

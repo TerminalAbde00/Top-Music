@@ -86,13 +86,13 @@ if($myDB->connect_errno) {
                         </div>
 
                         <!-- Pulsante Elimina (solo per il proprietario) -->
-                        <?php if ($userId == $song['fkUser']): ?>
+                        <?php /*if ($userId == $song['fkUser']): ?>
                             <a href="api/delete_song.php?idc=<?= $song['Id'] ?>"
                                onclick="return confirm('Sei sicuro di voler cancellare <?= htmlspecialchars($song['NomeCanzone']) ?> ?')"
                                class="delete-button">
                                 <img src="IMG/PAGINA/del.png" id="del" alt="Elimina canzone">
                             </a>
-                        <?php endif; ?>
+                        <?php endif;*/ ?>
                     <?php endif; ?>
 
                     <!-- Card Canzone -->
