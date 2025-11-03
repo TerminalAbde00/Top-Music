@@ -32,7 +32,7 @@ if(!isset($_SESSION["id"])){
         }
 
         .top-bar {
-            background: #1a1a1a;
+            background: #333333;
             padding: 1rem;
             position: fixed;
             top: 0;
@@ -391,7 +391,6 @@ if(!isset($_SESSION["id"])){
         <div id="profile" class="tab-content">
             <div class="profile-section">
                 <div class="profile-header">
-                    <img src="IMG/PAGINA/user-default.png" alt="Profile" class="profile-avatar">
                     <h2><?php echo htmlspecialchars($_SESSION["nome"], ENT_QUOTES, 'UTF-8'); ?></h2>
                     <?php
                     $userInfoQuery = mysqli_query($myDB, "SELECT Email FROM utenti WHERE Id=".$_SESSION["id"]);
