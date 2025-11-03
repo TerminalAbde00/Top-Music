@@ -116,7 +116,7 @@ if($myDB->connect_errno) {
         ?>
     </main>
     <!-- Upload Button -->
-    <a href="upload.php" class="upload-button" aria-label="Carica una nuova canzone">
+    <a href="profilo.php" class="upload-button" aria-label="Carica una nuova canzone">
         <img src="IMG/PAGINA/upload.png" id="upup" alt="Carica canzone">
     </a>
 
