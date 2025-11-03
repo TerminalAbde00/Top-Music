@@ -37,7 +37,7 @@ if (isset($_FILES['IMG']) && $_FILES['IMG']['error'] === UPLOAD_ERR_OK) {
         $errors[] = "Immagine troppo grande (max 2MB)";
     } else {
         $IMG_U_name_new = uniqid('', true) . '.' . $IMG_U_ext;
-        $IMG_U_des = 'IMG/COVER/' . $IMG_U_name_new;
+        $IMG_U_des = '../IMG/COVER/' . $IMG_U_name_new;
         
         if (!move_uploaded_file($IMG_U['tmp_name'], $IMG_U_des)) {
             $errors[] = "Errore nel caricamento dell'immagine";
@@ -59,7 +59,7 @@ if (isset($_FILES['VID']) && $_FILES['VID']['error'] === UPLOAD_ERR_OK) {
         $errors[] = "File troppo grande (max 20MB)";
     } else {
         $VID_U_name_new = uniqid('', true) . '.' . $VID_U_ext;
-        $VID_U_des = 'VID/' . $VID_U_name_new;
+        $VID_U_des = '../VID/' . $VID_U_name_new;
         
         if (!move_uploaded_file($VID_U['tmp_name'], $VID_U_des)) {
             $errors[] = "Errore nel caricamento del file audio/video";
@@ -80,10 +80,10 @@ if (!isset($_POST['Autore']) || empty(trim($_POST['Autore']))) {
 // Se ci sono errori, cancella i file caricati e restituisci errore
 if (!empty($errors)) {
     if ($IMG_U_name_new && file_exists('IMG/COVER/' . $IMG_U_name_new)) {
-        unlink('IMG/COVER/' . $IMG_U_name_new);
+        unlink('../IMG/COVER/' . $IMG_U_name_new);
     }
     if ($VID_U_name_new && file_exists('VID/' . $VID_U_name_new)) {
-        unlink('VID/' . $VID_U_name_new);
+        unlink('../VID/' . $VID_U_name_new);
     }
     http_response_code(400);
     echo json_encode(["errors" => $errors]);
@@ -106,11 +106,11 @@ if ($stmt->execute()) {
     header("Location: /");
 } else {
     // Cancella file se inserimento fallisce
-    if (file_exists('IMG/COVER/' . $IMG_U_name_new)) {
-        unlink('IMG/COVER/' . $IMG_U_name_new);
+    if (file_exists('../IMG/COVER/' . $IMG_U_name_new)) {
+        unlink('../IMG/COVER/' . $IMG_U_name_new);
     }
-    if (file_exists('VID/' . $VID_U_name_new)) {
-        unlink('VID/' . $VID_U_name_new);
+    if (file_exists('../VID/' . $VID_U_name_new)) {
+        unlink('../VID/' . $VID_U_name_new);
     }
     http_response_code(500);
     echo json_encode(["error" => "Errore nell'inserimento nel database"]);

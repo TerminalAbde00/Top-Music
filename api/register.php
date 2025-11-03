@@ -98,12 +98,12 @@ if ($stmt->execute()) {
     $_SESSION["id"] = $user_id;
     $_SESSION["nome"] = $nome;
 
-    header("Location: ../upload.php");
+    header("Location: ../profilo.php");
 } else {
     $_SESSION["errore_register"] = true;
     $_SESSION["errore_register0"] = true;
     $_SESSION["errore_register1"] = true;
-    header("Location: ../login.php");
+    header("Location: ../profilo.php");
 }
 
 $stmt->close();

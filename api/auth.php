@@ -64,10 +64,10 @@ $stmt->close();
 $mydb->close();
 
 if ($login_success) {
-    header("Location: ../upload.php");
+    header("Location: ../profilo.php");
 } else {
     $_SESSION["errore_login"] = true;
-    header("Location: ../login.php");
+    header("Location: ../profilo.php");
 }
 exit();
 ?>
