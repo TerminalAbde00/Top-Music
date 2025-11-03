@@ -63,8 +63,8 @@ if ($row['fkUser'] != $userId) {
 }
 
 // Percorsi file
-$path1 = 'IMG/COVER/' . $row["IMG"];
-$path2 = 'VID/' . $row["VID"];
+$path1 = '../IMG/COVER/' . $row["IMG"];
+$path2 = '../VID/' . $row["VID"];
 
 // Cancella file dal server
 if (file_exists($path1)) {

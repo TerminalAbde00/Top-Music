@@ -87,7 +87,7 @@ if($myDB->connect_errno) {
 
                         <!-- Pulsante Elimina (solo per il proprietario) -->
                         <?php if ($userId == $song['fkUser']): ?>
-                            <a href="del_script.php?idc=<?= $song['Id'] ?>"
+                            <a href="api/delete_song.php?idc=<?= $song['Id'] ?>"
                                onclick="return confirm('Sei sicuro di voler cancellare <?= htmlspecialchars($song['NomeCanzone']) ?> ?')"
                                class="delete-button">
                                 <img src="IMG/PAGINA/del.png" id="del" alt="Elimina canzone">
