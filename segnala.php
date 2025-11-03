@@ -174,10 +174,7 @@ if ($stmt->execute()) {
        <br>
 
   </body>
-  </html>';
-
-  
-  mail($to, $subject, $message, $headers);
-  
+  </html>';  
+  mail($to, $subject, $message, $headers);  
   }
 ?>
