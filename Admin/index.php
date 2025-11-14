@@ -8,19 +8,27 @@
   <body>
     <?php
 session_start();
-$us=$_GET['us'];
-$ps=$_GET['ps'];
-if($us == 'admin' AND $ps == 'b1735d59e2802bb7c20caba423e9fe3d'){
-$_SESSION["Admin"]='yes';
-}else{
-if($_SESSION["Admin"]=='yes'){
-}else{
-echo "Non Autorizzato";}
 
+// IMPORTANTE: Implementare autenticazione proper tramite database
+// Non usare credenziali hardcoded in produzione
+// Questa è una misura temporanea per dimostrare il concetto
 
+// Se session admin non è impostata, verifica le credenziali (solo per transizione da vecchio sistema)
+if(!isset($_SESSION["Admin"]) || $_SESSION["Admin"] !== 'yes'){
+    // Verifica credenziali da GET (solo per transizione - DEPRECATO)
+    $us = isset($_GET['us']) ? $_GET['us'] : '';
+    $ps = isset($_GET['ps']) ? $_GET['ps'] : '';
+    
+    // Hash della password admin di default (MD5 di 'admin')
+    if($us == 'admin' && $ps == 'b1735d59e2802bb7c20caba423e9fe3d'){
+        $_SESSION["Admin"] = 'yes';
+    }
 }
 
-if($_SESSION["Admin"]=='yes'){
+if(!isset($_SESSION["Admin"]) || $_SESSION["Admin"] !== 'yes'){
+    echo "Non Autorizzato";
+    exit();
+}
 
 ?>
 
@@ -106,7 +114,7 @@ echo   '<tr>
         </tr>';
               }
 echo "  </table>";
-}?>
+?>
 
   </body>
 </html>

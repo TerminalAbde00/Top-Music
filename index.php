@@ -68,12 +68,12 @@ if($myDB->connect_errno) {
                     <?php if ($isLoggedIn): ?>
                         <?php
                         // Controlla se la canzone è nei preferiti
-                        $Preferiti = $myDB->query(
-                            "SELECT 1 FROM canzoniPreferite 
-                             WHERE fkCanzone = {$song['Id']} 
-                             AND fkUtente = {$userId}"
-                        );
+                        $stmt = $myDB->prepare("SELECT 1 FROM canzoniPreferite WHERE fkCanzone = ? AND fkUtente = ?");
+                        $stmt->bind_param('ii', $song['Id'], $userId);
+                        $stmt->execute();
+                        $Preferiti = $stmt->get_result();
                         $isFavorite = $Preferiti->num_rows > 0;
+                        $stmt->close();
                         ?>
                         
                         <!-- Pulsante Preferiti -->

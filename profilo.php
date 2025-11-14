@@ -340,8 +340,12 @@ if(!isset($_SESSION["id"])){
                     echo "Errore di connessione";
                     exit();
                 }
-                $risultato = $myDB->query("SELECT * FROM canzoni WHERE fkUser =".$_SESSION['id']);
-                if (mysqli_num_rows($risultato) == 0){
+                // Usa prepared statement per evitare SQL injection
+                $stmt = $myDB->prepare("SELECT * FROM canzoni WHERE fkUser = ?");
+                $stmt->bind_param('i', $_SESSION['id']);
+                $stmt->execute();
+                $risultato = $stmt->get_result();
+                if ($risultato->num_rows == 0){
                     echo "<p>Non hai ancora caricato nessuna canzone.</p>";
                 }
                 while ($row = $risultato->fetch_assoc()) {
@@ -362,8 +366,12 @@ if(!isset($_SESSION["id"])){
                         <div class="card-actions">';
                         
                     // Bottone preferiti
-                    $Preferiti = mysqli_query($myDB, "SELECT fkCanzone,fkUtente FROM canzoniPreferite WHERE fkCanzone=".$row['Id']." AND fkUtente=".$_SESSION["id"]);
-                    if (mysqli_num_rows($Preferiti) > 0){
+                    $stmtPref = $myDB->prepare("SELECT fkCanzone,fkUtente FROM canzoniPreferite WHERE fkCanzone = ? AND fkUtente = ?");
+                    $stmtPref->bind_param('ii', $row['Id'], $_SESSION["id"]);
+                    $stmtPref->execute();
+                    $Preferiti = $stmtPref->get_result();
+                    $stmtPref->close();
+                    if ($Preferiti->num_rows > 0){
                         echo '<button class="favorite-btn active" id="fav-'.$row["Id"].'" onclick="toggleFavorite('.$row['Id'].')">
                                 <i class="fas fa-heart"></i>
                             </button>';
@@ -405,12 +413,16 @@ if(!isset($_SESSION["id"])){
                 <div class="profile-stats">
                     <div class="stat-card">
                         <i class="fas fa-music fa-2x"></i>
-                        <h3><?php echo mysqli_num_rows($risultato); ?></h3>
+                        <h3><?php echo $risultato->num_rows; ?></h3>
                         <p>Canzoni caricate</p>
                     </div>
                     <?php 
-                    $favQuery = mysqli_query($myDB, "SELECT COUNT(*) as total FROM canzoniPreferite WHERE fkUtente=".$_SESSION["id"]);
-                    $favCount = mysqli_fetch_assoc($favQuery)['total'];
+                    $favStmt = $myDB->prepare("SELECT COUNT(*) as total FROM canzoniPreferite WHERE fkUtente = ?");
+                    $favStmt->bind_param('i', $_SESSION["id"]);
+                    $favStmt->execute();
+                    $favQuery = $favStmt->get_result();
+                    $favCount = $favQuery->fetch_assoc()['total'];
+                    $favStmt->close();
                     ?>
                     <div class="stat-card">
                         <i class="fas fa-heart fa-2x"></i>
@@ -418,8 +430,12 @@ if(!isset($_SESSION["id"])){
                         <p>Canzoni preferite</p>
                     </div>
                     <?php
-                    $dataQuery = mysqli_query($myDB, "SELECT Data FROM utenti WHERE Id=".$_SESSION["id"]);
-                    $userData = mysqli_fetch_assoc($dataQuery);
+                    $dataStmt = $myDB->prepare("SELECT Data FROM utenti WHERE Id = ?");
+                    $dataStmt->bind_param('i', $_SESSION["id"]);
+                    $dataStmt->execute();
+                    $dataQuery = $dataStmt->get_result();
+                    $userData = $dataQuery->fetch_assoc();
+                    $dataStmt->close();
                     $dateJoined = new DateTime($userData['Data']);
                     $now = new DateTime();
                     $interval = $dateJoined->diff($now);

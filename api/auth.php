@@ -50,8 +50,9 @@ $stmt->bind_result($id, $nome, $stored_password);
 $login_success = false;
 
 while ($stmt->fetch()) {
-    // Verifica password (hash MD5 per compatibilità, da aggiornare in futuro con password_hash)
-    if (md5($password) == $stored_password) {
+    // Verifica password usando password_verify() per sicurezza
+    // Supporta sia password_hash che MD5 per compatibilità legacy
+    if (password_verify($password, $stored_password) || md5($password) == $stored_password) {
         unset($_SESSION["errore_login"]);
         $_SESSION["nome"] = htmlspecialchars($nome, ENT_QUOTES, 'UTF-8');
         $_SESSION["id"] = $id;

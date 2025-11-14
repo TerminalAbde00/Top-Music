@@ -45,7 +45,8 @@ if (empty($username) || empty($password) || empty($nome)) {
 // Sanitizzazione input
 $username = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
 $nome = htmlspecialchars($nome, ENT_QUOTES, 'UTF-8');
-$MD5Password = md5($password);
+// Usa password_hash per sicurezza, MD5 è deprecato
+$hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 $Data = date("d-m-Y");
 $Ora = date("H:i:s");
 
@@ -86,7 +87,7 @@ if (!$stmt) {
     exit();
 }
 
-$stmt->bind_param('sssss', $username, $MD5Password, $nome, $Data, $Ora);
+$stmt->bind_param('sssss', $username, $hashedPassword, $nome, $Data, $Ora);
 
 if ($stmt->execute()) {
     unset($_SESSION["errore_register"]);

@@ -43,7 +43,11 @@
               echo "Errore di connessione";
               exit();
           }
-          $risultato=$myDB->query("SELECT canzoni.*,canzoniPreferite.fkCanzone,canzoniPreferite.fkUtente FROM canzoni INNER JOIN canzoniPreferite ON canzoni.Id=canzoniPreferite.fkCanzone WHERE canzoniPreferite.fkUtente=".$_SESSION["id"]." ORDER BY canzoniPreferite.id DESC");
+          // Usa prepared statement per evitare SQL injection
+          $stmt = $myDB->prepare("SELECT canzoni.*,canzoniPreferite.fkCanzone,canzoniPreferite.fkUtente FROM canzoni INNER JOIN canzoniPreferite ON canzoni.Id=canzoniPreferite.fkCanzone WHERE canzoniPreferite.fkUtente = ? ORDER BY canzoniPreferite.id DESC");
+          $stmt->bind_param('i', $_SESSION["id"]);
+          $stmt->execute();
+          $risultato = $stmt->get_result();
 		  if (mysqli_num_rows($risultato) == 0){
           
           echo "Nessuna canzone tra i preferiti.";
@@ -54,14 +58,19 @@
 				      <div class="card">';
 							if (isset($_SESSION["id"])) {
 
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------
-		$Preferiti = mysqli_query($myDB, "SELECT fkCanzone,fkUtente FROM canzoniPreferite WHERE fkCanzone=".$row['Id']." AND fkUtente=".$_SESSION["id"]);
-			 if (mysqli_num_rows($Preferiti) > 0){
-						echo '<div id="bottone_colore'.$row["Id"].'"><button style="background:gold;" id="bottone'.$row["Id"].'"  onClick="elimina('.$row['Id'].')" class="bottones" ></button></div>';
-			 }else{
-					 echo '<div id="bottone_colore'.$row["Id"].'"><button style="background:grey;" id="bottone'.$row["Id"].'"  onClick="aggiungi('.$row['Id'].')" class="bottone" ></button></div>';
-			 }
-		//---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		// Usa prepared statement per evitare SQL injection
+		$stmtFav = $myDB->prepare("SELECT fkCanzone,fkUtente FROM canzoniPreferite WHERE fkCanzone = ? AND fkUtente = ?");
+		$stmtFav->bind_param('ii', $row['Id'], $_SESSION["id"]);
+		$stmtFav->execute();
+		$Preferiti = $stmtFav->get_result();
+		$stmtFav->close();
+		
+		if ($Preferiti->num_rows > 0){
+					echo '<div id="bottone_colore'.$row["Id"].'"><button style="background:gold;" id="bottone'.$row["Id"].'"  onClick="elimina('.$row['Id'].')" class="bottones" ></button></div>';
+		}else{
+				 echo '<div id="bottone_colore'.$row["Id"].'"><button style="background:grey;" id="bottone'.$row["Id"].'"  onClick="aggiungi('.$row['Id'].')" class="bottone" ></button></div>';
+		}
 											if ($_SESSION["id"]==$row["fkUser"]) {
 											 echo '<a href="del_script.php?idc='.$row["Id"].'"onclick="return confirm(&#039Sei sicuro di voler cancellare '.$row["NomeCanzone"].' ?&#039);"><img src="IMG/PAGINA/del.png" id="del" >';
 													}
