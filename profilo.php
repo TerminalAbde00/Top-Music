@@ -611,22 +611,20 @@ if(!isset($_SESSION["id"])){
             const button = document.getElementById('fav-' + songId);
             if (button.classList.contains('active')) {
                 // Rimuovi dai preferiti
-                fetch('api/favorite.php?action=remove&song_id=' + songId)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            button.classList.remove('active');
-                        }
-                    });
+                fetch('api/favorite.php?action=remove&Id=' + songId)
+                    .then(response => response.text())
+                    .then(html => {
+                        button.classList.remove('active');
+                    })
+                    .catch(error => console.error('Errore:', error));
             } else {
                 // Aggiungi ai preferiti
-                fetch('api/favorite.php?action=add&song_id=' + songId)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            button.classList.add('active');
-                        }
-                    });
+                fetch('api/favorite.php?action=add&Id=' + songId)
+                    .then(response => response.text())
+                    .then(html => {
+                        button.classList.add('active');
+                    })
+                    .catch(error => console.error('Errore:', error));
             }
         }
 
