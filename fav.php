@@ -72,7 +72,7 @@
 				 echo '<div id="bottone_colore'.$row["Id"].'"><button style="background:grey;" id="bottone'.$row["Id"].'"  onClick="aggiungi('.$row['Id'].')" class="bottone" ></button></div>';
 		}
 											if ($_SESSION["id"]==$row["fkUser"]) {
-											 echo '<a href="del_script.php?idc='.$row["Id"].'"onclick="return confirm(&#039Sei sicuro di voler cancellare '.$row["NomeCanzone"].' ?&#039);"><img src="IMG/PAGINA/del.png" id="del" >';
+											 echo '<a href="api/delete_song.php?idc='.$row["Id"].'"onclick="return confirm(&#039Sei sicuro di voler cancellare '.$row["NomeCanzone"].' ?&#039);"><img src="IMG/PAGINA/del.png" id="del" >';
 													}
 												}
 				       echo '<a href="Player.php?Id='.$row["Id"].'" style="color: black;text-decoration: none;">

@@ -129,6 +129,134 @@ if(!isset($_SESSION["id"])){
             padding: 20px;
         }
 
+        /* Stili lista canzoni */
+        .songs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
+        }
+
+        .song-list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: white;
+            border-bottom: 1px solid #e1e1e1;
+            transition: background 0.3s ease;
+        }
+
+        .song-list-item:hover {
+            background: #f8f9fa;
+        }
+
+        .song-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .song-list-link {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .song-list-cover {
+            flex-shrink: 0;
+        }
+
+        .song-list-cover img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .song-list-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .song-list-title {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-list-artist {
+            margin: 0;
+            font-size: 13px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-list-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .favorite-btn-list {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .favorite-btn-list:hover {
+            background: #e0e0e0;
+            color: #ff6b6b;
+        }
+
+        .favorite-btn-list.active {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .delete-btn-list {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: #f0f0f0;
+            color: #999;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .delete-btn-list:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .no-songs {
+            padding: 40px 20px;
+            text-align: center;
+            color: #999;
+            font-size: 16px;
+        }
+
         .song-card {
             background: white;
             border-radius: 10px;
@@ -332,7 +460,7 @@ if(!isset($_SESSION["id"])){
 
             <!-- Tab Le tue canzoni -->
             <div id="songs" class="tab-content">
-                <div class="songs-grid">
+                <div class="songs-list">
                 <?php
                 include("config.php");
                 $myDB = new mysqli(SERVER, UTENTE, PASSWORD, DATABASE);
@@ -341,49 +469,44 @@ if(!isset($_SESSION["id"])){
                     exit();
                 }
                 // Usa prepared statement per evitare SQL injection
-                $stmt = $myDB->prepare("SELECT * FROM canzoni WHERE fkUser = ?");
+                $stmt = $myDB->prepare("SELECT * FROM canzoni WHERE fkUser = ? ORDER BY Id DESC");
                 $stmt->bind_param('i', $_SESSION['id']);
                 $stmt->execute();
                 $risultato = $stmt->get_result();
                 if ($risultato->num_rows == 0){
-                    echo "<p>Non hai ancora caricato nessuna canzone.</p>";
+                    echo "<p class='no-songs'>Non hai ancora caricato nessuna canzone.</p>";
                 }
                 while ($row = $risultato->fetch_assoc()) {
-                    echo '
-                    <div class="song-card">
-                        <a href="Player.php?Id='.$row["Id"].'" class="song-link">
-                            <div class="song-cover">
-                                <img src="IMG/COVER/'.$row["IMG"].'" alt="'.$row["NomeCanzone"].'">
-                                <div class="song-overlay">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="song-info">
-                                <h3>'.$row["NomeCanzone"].'</h3>
-                                <p><i class="fas fa-user"></i> '.$row["Autore"].'</p>
-                            </div>
-                        </a>
-                        <div class="card-actions">';
-                        
                     // Bottone preferiti
                     $stmtPref = $myDB->prepare("SELECT fkCanzone,fkUtente FROM canzoniPreferite WHERE fkCanzone = ? AND fkUtente = ?");
                     $stmtPref->bind_param('ii', $row['Id'], $_SESSION["id"]);
                     $stmtPref->execute();
                     $Preferiti = $stmtPref->get_result();
+                    $isFavorite = $Preferiti->num_rows > 0;
                     $stmtPref->close();
-                    if ($Preferiti->num_rows > 0){
-                        echo '<button class="favorite-btn active" id="fav-'.$row["Id"].'" onclick="toggleFavorite('.$row['Id'].')">
+                    
+                    $favoriteClass = $isFavorite ? 'active' : '';
+                    $favoriteIcon = $isFavorite ? '♥' : '♡';
+                    
+                    echo '
+                    <div class="song-list-item">
+                        <a href="Player.php?Id='.$row["Id"].'" class="song-list-link">
+                            <div class="song-list-cover">
+                                <img src="IMG/COVER/'.$row["IMG"].'" alt="'.$row["NomeCanzone"].'">
+                            </div>
+                            <div class="song-list-info">
+                                <h3 class="song-list-title">'.$row["NomeCanzone"].'</h3>
+                                <p class="song-list-artist">'.$row["Autore"].'</p>
+                            </div>
+                        </a>
+                        <div class="song-list-actions">
+                            <button class="favorite-btn-list '.$favoriteClass.'" id="fav-'.$row["Id"].'" onclick="toggleFavorite('.$row['Id'].')" title="Aggiungi ai preferiti">
                                 <i class="fas fa-heart"></i>
                             </button>';
-                    } else {
-                        echo '<button class="favorite-btn" id="fav-'.$row["Id"].'" onclick="toggleFavorite('.$row['Id'].')">
-                                <i class="fas fa-heart"></i>
-                            </button>';
-                    }
                     
                     // Bottone elimina
                     if ($_SESSION["id"] == $row["fkUser"]) {
-                        echo '<button class="delete-btn" onclick="deleteSong('.$row["Id"].',\''.$row["NomeCanzone"].'\')">
+                        echo '<button class="delete-btn-list" onclick="deleteSong('.$row["Id"].',\''.$row["NomeCanzone"].'\');" title="Elimina canzone">
                                 <i class="fas fa-trash-alt"></i>
                             </button>';
                     }
@@ -392,6 +515,7 @@ if(!isset($_SESSION["id"])){
                     </div>';
                 }
                 ?>
+                </div>
             </div>
         </div>
 
@@ -508,7 +632,32 @@ if(!isset($_SESSION["id"])){
 
         function deleteSong(songId, songName) {
             if (confirm('Sei sicuro di voler cancellare ' + songName + '?')) {
-                window.location.href = 'del_script.php?idc=' + songId;
+                // Usa l'API moderna delete_song.php
+                fetch('api/delete_song.php?idc=' + songId)
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else if (response.status === 401) {
+                            alert('Sessione scaduta. Effettua il login.');
+                            window.location.href = 'login.php';
+                        } else if (response.status === 403) {
+                            alert('Non hai permessi per cancellare questa canzone.');
+                        } else {
+                            throw new Error('Errore nella cancellazione');
+                        }
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert('Canzone cancellata con successo');
+                            location.reload(); // Ricarica la pagina
+                        } else {
+                            alert('Errore: ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Errore:', error);
+                        alert('Errore nella cancellazione della canzone.');
+                    });
             }
         }
 
