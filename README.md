@@ -156,9 +156,6 @@ cd c:\xampp\htdocs\topmusic
 
 ---
 
-## 📚 Documentazione
-
-La documentazione completa si trova in **`DOCS/`**:
 
 ## 🔌 API Endpoints
 
