@@ -48,7 +48,7 @@ if(!isset($_SESSION["Admin"]) || $_SESSION["Admin"] !== 'yes'){
                 <input type="password" name="ps" placeholder="Password" required>
                 <button type="submit">Accedi</button>
             </form>
-            <p class="login-note">📝 Credenziali: admin / admin</p>
+            <p class="login-note">📝 </p>
         </div>
     </div>';
     exit();
