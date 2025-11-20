@@ -75,11 +75,6 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 ├── 📄 fav.php                 # ⭐ Pagina preferiti
 ├── 📄 segnala.php             # 🚨 Segnalazioni
 ├── 📄 config.php              # ⚙️ Configurazione DB
-│
-├── 📄 README.md               # Questo file
-├── 📄 SECURITY_FIXES.md       # Fix di sicurezza
-├── 📄 ANALISI_COMPLETA_POST_P0.md # Analisi completa
-├── 📄 composer.json           # Dipendenze Composer
 └── 📄 .gitignore              # Git ignore rules
 ```
 
