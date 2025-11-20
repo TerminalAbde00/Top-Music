@@ -14,7 +14,7 @@ $stmt = $conn->prepare("INSERT INTO `segnalazioni` (`fkCanzone`, `descrizione`) 
 $stmt->bind_param('ss',$id,$messaggio);
 //______________________________________________________________________________
 if ($stmt->execute()) {
-  $to = 'abdeee2028@gmail.com';
+  $to = '';
   $subject = 'Canzone Segnalata';
   $from = 'topmusic';
   $headers  = 'MIME-Version: 1.0' . "\r\n";
