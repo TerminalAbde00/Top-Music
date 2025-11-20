@@ -1,5 +1,6 @@
 
 img/icons/.DS_Store
+DOCS/
 
 # Ignora file media in VID/ - troppo grandi per il repository
 VID/*.mp3
