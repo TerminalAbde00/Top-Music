@@ -78,10 +78,10 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 ### 🔐 Best Practices Implementate
 
 ✅ **Prepared Statements** - `bind_param()` per tutte le query  
-✅ **Password Hashing** - BCRYPT (cost=10) per nuove registrazioni  
+✅ **Password Hashing** - BCRYPT per nuove registrazioni  
 ✅ **Input Validation** - Trim, sanitize, type check su tutti i campi  
 ✅ **Output Encoding** - HTML entities, URL encoding, JSON encoding  
-✅ **Session Management** - Session regeneration, CSRF-like patterns  
+✅ **Session Management** - Session regeneration
 ✅ **HTTP Methods** - POST per modifiche, GET per letture  
 ✅ **HTTP Status Codes** - 401, 403, 404, 405, 500 appropriati  
 ✅ **Error Handling** - Errori loggati, non mostrati in produzione  
