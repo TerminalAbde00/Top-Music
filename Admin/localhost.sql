@@ -133,15 +133,6 @@ CREATE TABLE IF NOT EXISTS `utenti` (
 -- Dump dei dati per la tabella `utenti`
 --
 
-INSERT INTO `utenti` (`Id`, `nome`, `username`, `password`, `Data`, `Ora`) VALUES
-(14, 'alessandro', 'ale', '202cb962ac59075b964b07152d234b70', NULL, NULL),
-(17, 'lorenzo', 'lorenzo', '3334703c735bd09f54c377b4dfaac1c3', NULL, NULL),
-(18, 'Abde', 'Eljoudiani', 'b1735d59e2802bb7c20caba423e9fe3d', NULL, NULL),
-(28, 'lorenzo', 'lorenzo1', '25d55ad283aa400af464c76d713c07ad', '20-04-2021 ', '11:10:25'),
-(29, 'Fato', 'Zahofato', '5e8667a439c68f5145dd2fcbecf02209', '11-05-2021 ', '17:39:41'),
-(30, 'Bulla', 'BullaBulla', '9d8da28af88b82d68c151e1094ab0d06', '19-05-2021 ', '12:21:00'),
-(32, 'zabuza', 'akatsuki', '5e8667a439c68f5145dd2fcbecf02209', '30-05-2021 ', '11:41:40');
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

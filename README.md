@@ -2,7 +2,6 @@
 
 Una moderna piattaforma web per caricare, ascoltare e condividere musica con interfaccia intuitiva e funzionalità avanzate.
 
-**Versione**: 1.0 | **Status**: ✅ Production-Ready | **Ultimo Aggiornamento**: 14 Novembre 2025
 
 ---
 
@@ -69,13 +68,6 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 │   ├── *.mp4                  # File video
 │   └── loop/                  # Background videos
 │
-├── 📁 old_scripts/            # ⚠️ DEPRECATI (non usare)
-│   ├── addfav.php             # ❌ Vulnerabile
-│   ├── delfav.php             # ❌ Vulnerabile
-│   ├── del_script.php         # ❌ Vulnerabile
-│   ├── ricerca.php            # ❌ Vulnerabile
-│   └── README.md
-│
 ├── 📄 index.php               # 🏠 Homepage
 ├── 📄 login.php               # 🔐 Login/Registrazione
 ├── 📄 Player.php              # 🎵 Player canzoni
@@ -93,17 +85,6 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 
 ## 🔒 Sicurezza
 
-### ✅ Implementazioni di Sicurezza (P0 - Risolte)
-
-| Minaccia | Stato | Dettagli |
-|----------|-------|---------|
-| **SQL Injection** | ✅ FIXED 100% | Prepared statements su tutte le query |
-| **Password Weak** | ✅ FIXED 100% | BCRYPT hashing + MD5 fallback legacy |
-| **XSS (Cross-Site Scripting)** | ✅ FIXED | `htmlspecialchars(ENT_QUOTES, UTF-8)` su output |
-| **Admin Auth** | ✅ FIXED | Session-based authentication |
-| **File Upload RCE** | ✅ FIXED | Whitelist estensioni + nomi randomizzati |
-| **Broken Auth** | ✅ FIXED | password_verify() + session regeneration |
-
 ### 🔐 Best Practices Implementate
 
 ✅ **Prepared Statements** - `bind_param()` per tutte le query  
@@ -115,15 +96,6 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 ✅ **HTTP Status Codes** - 401, 403, 404, 405, 500 appropriati  
 ✅ **Error Handling** - Errori loggati, non mostrati in produzione  
 
-### ⚠️ Vecchi Script (Non Usare)
-
-La cartella `old_scripts/` contiene script deprecati con **vulnerabilità di sicurezza**:
-- ❌ SQL Injection vulnerabili
-- ❌ Password in MD5 senza salt
-- ❌ Input non validato
-- ❌ Output non escaped
-
-**Non utilizzare in produzione!** Usa le API moderne in `/api/`
 
 ---
 
@@ -146,17 +118,6 @@ La cartella `old_scripts/` contiene script deprecati con **vulnerabilità di sic
 - **PHP Extensions**: mysqli, gd (optional), fileinfo
 - **SSL/TLS**: HTTPS (obbligatorio in produzione)
 
-### Dipendenze (Composer)
-```json
-{
-  "require": {
-    "php": "^8.0",
-    "vlucas/phpdotenv": "^5.3",
-    "firebase/php-jwt": "^6.0",
-    "monolog/monolog": "^2.0"
-  }
-}
-```
 
 ---
 
@@ -172,12 +133,6 @@ cd c:\xampp\htdocs\topmusic
 # Configura database
 # - Importa Admin/localhost.sql in MySQL
 # - Modifica config.php con tue credenziali
-
-# Copia .env.example → .env (se presente)
-cp .env.example .env
-
-# Installa dipendenze Composer
-composer install
 
 # Avvia XAMPP
 # - Apache: ON
@@ -215,22 +170,6 @@ composer install
 
 La documentazione completa si trova in **`DOCS/`**:
 
-| Documento | Scopo |
-|-----------|-------|
-| [`DOCS/DOCUMENTAZIONE.md`](./DOCS/DOCUMENTAZIONE.md) | Guida tecnica completa (150+ sezioni) |
-| [`DOCS/GUIDA_PRATICA.md`](./DOCS/GUIDA_PRATICA.md) | Code examples e snippet (20+ esempi) |
-| [`DOCS/QUICK_REFERENCE.md`](./DOCS/QUICK_REFERENCE.md) | Lookup rapido e cheat sheet |
-| [`DOCS/README.md`](./DOCS/README.md) | Indice e navigazione docs |
-
-### Letture Consigliate
-
-- **Per iniziare**: [Panoramica in DOCUMENTAZIONE.md](./DOCS/DOCUMENTAZIONE.md#panoramica-progetto)
-- **Per installare**: [Setup Locale in DOCUMENTAZIONE.md](./DOCS/DOCUMENTAZIONE.md#guida-installazione)
-- **Per code**: [GUIDA_PRATICA.md](./DOCS/GUIDA_PRATICA.md)
-- **Per lookup**: [QUICK_REFERENCE.md](./DOCS/QUICK_REFERENCE.md)
-
----
-
 ## 🔌 API Endpoints
 
 Tutti gli endpoint richiedono **POST** (salvo diversamente specificato).
@@ -253,10 +192,6 @@ GET    /api/delete_song.php  → Elimina canzone
 ```
 POST   /api/favorite.php     → Add/Remove preferiti
 ```
-
-📖 **Documentazione API completa**: [DOCS/DOCUMENTAZIONE.md#api-reference](./DOCS/DOCUMENTAZIONE.md#api-reference)
-
----
 
 ## 🗄️ Database
 
@@ -287,9 +222,6 @@ define("PASSWORD","");           // Password
 define("DATABASE","my_topmusic"); // Database name
 ```
 
-📖 **Schema database completo**: [DOCS/DOCUMENTAZIONE.md#database](./DOCS/DOCUMENTAZIONE.md#database)
-
----
 
 ## 👨‍💻 Sviluppo
 
@@ -317,178 +249,8 @@ mysql -u root < Admin/localhost.sql
 # Run XAMPP
 # Apache: START
 # MySQL: START
-
-# Test
-curl http://localhost/topmusic/
-
-# o visita
-# http://localhost/topmusic/
+# visita: http://localhost/topmusic/
 ```
-
-### Aggiungere Features
-
-Vedi **[GUIDA_PRATICA.md](./DOCS/GUIDA_PRATICA.md#aggiungere-nuova-feature)** per:
-- Creare nuovo endpoint API
-- Aggiungere tab nel profilo
-- Implement front-end feature
-
----
-
-## 🧪 Testing
-
-### Test Manuali
-
-Segui la **[Guida Testing in GUIDA_PRATICA.md](./DOCS/GUIDA_PRATICA.md#testing-manuale)**:
-
-1. ✅ Test Registrazione
-2. ✅ Test Login
-3. ✅ Test Upload Canzone
-4. ✅ Test Ricerca
-5. ✅ Test Preferiti
-6. ✅ Test Player
-7. ✅ Test Database Connection
-
-### Test Automatici
-
-```bash
-# PHPUnit (se configurato)
-vendor/bin/phpunit
-
-# PHP Lint
-php -l *.php api/*.php Admin/*.php
-```
-
-### Performance
-
-```bash
-# Benchmark database
-mysql -u root -e "SELECT COUNT(*) FROM my_topmusic.canzoni;"
-
-# Load test
-# Apache Bench: ab -n 100 -c 10 http://localhost/topmusic/
-```
-
----
-
-## 🐛 Troubleshooting
-
-### Problema: "Errore di connessione database"
-```
-✓ Verifica MySQL running
-✓ Controlla credenziali config.php
-✓ Verifica database esiste: my_topmusic
-```
-
-### Problema: "Upload fallisce"
-```
-✓ Cartelle IMG/COVER e VID esisitono?
-✓ Permessi scrittura 755?
-✓ File size < 2MB (cover) / 20MB (audio)?
-```
-
-### Problema: "Ricerca non funziona"
-```
-✓ Apri DevTools (F12) → Network tab
-✓ Controlla AJAX request a api/search.php
-✓ Status 200? Response JSON valido?
-```
-
-📖 **Troubleshooting completo**: [DOCS/DOCUMENTAZIONE.md#troubleshooting](./DOCS/DOCUMENTAZIONE.md#troubleshooting)
-
----
-
-## 📈 Metrics & Performance
-
-### Dimensioni Database
-```sql
--- Calcola grandezza DB
-SELECT ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) 
-FROM information_schema.tables 
-WHERE table_schema = 'my_topmusic';
-```
-
-### Canzoni Più Popolari
-```sql
--- Top 10 preferiti
-SELECT fkCanzone, COUNT(*) as favorites
-FROM canzoniPreferite
-GROUP BY fkCanzone
-ORDER BY favorites DESC
-LIMIT 10;
-```
-
----
-
-## 🚀 Production Deployment
-
-### Pre-Deploy Checklist
-```
-☐ Testa tutte features localmente
-☐ Security audit completo
-☐ Backup database
-☐ Configura HTTPS/SSL
-☐ Setup WAF (Web Application Firewall)
-```
-
-### Deploy Steps
-```bash
-# 1. Backup
-mysqldump -u root my_topmusic > backup_$(date +%Y%m%d).sql
-
-# 2. Update config.php
-# - Credenziali produzione
-# - error_reporting(0)
-# - display_errors OFF
-
-# 3. Deploy files
-# - Upload cartelle su server
-# - Import database
-# - Test
-
-# 4. Post-Deploy
-# - Verifica site
-# - Monitor error logs
-# - Check performance
-```
-
-📖 **Deploy completo**: [QUICK_REFERENCE.md#deploy-checklist](./DOCS/QUICK_REFERENCE.md#-deploy-checklist)
-
----
-
-## 📞 Support & Contributing
-
-### Segnalare Bug
-```
-1. Descrivi il problema
-2. Allega screenshot/log
-3. Specifica browser/sistema
-4. Crea issue nel repository
-```
-
-### Suggerimenti Features
-```
-1. Apri discussion nel repository
-2. Descrivi feature richiesta
-3. Spiega use case
-4. Allega mockup (se disponibile)
-```
-
-### Contributing
-```
-1. Fork repository
-2. Crea feature branch
-3. Commit changes
-4. Push branch
-5. Open Pull Request
-```
-
-**Linee guida**:
-- Segui PSR-12 (PHP code style)
-- Commit message in italiano
-- Aggiungi test per feature nuove
-- Aggiorna documentazione
-
----
 
 ## 📄 Licenza
 
@@ -501,33 +263,10 @@ Questo progetto è **proprietario** e sviluppato come portfolio/progetto univers
 
 ## 👥 Autore & Team
 
-Sviluppato da **TOP MUSIC Development Team**
-
-- **Project Lead**: [Nome]
-- **Backend**: PHP Developer
-- **Frontend**: JavaScript Developer
-- **DevOps**: System Administrator
+Sviluppato da **Abde**
 
 ---
 
-## 📅 Changelog
-
-### v1.0 - 14 Novembre 2025 (Current)
-- ✅ Security fixes P0 (SQL Injection, Password Hashing)
-- ✅ Prepared statements su tutte query
-- ✅ BCRYPT password hashing
-- ✅ Documentazione completa
-- ✅ API endpoints sicuri
-
-### v0.9 - Ottobre 2025
-- Initial refactoring
-- Code cleanup
-- Security audit
-
-### v0.5 - Settembre 2025
-- Initial release
-
----
 
 ## 🔗 Link Rapidi
 
@@ -538,54 +277,6 @@ Sviluppato da **TOP MUSIC Development Team**
 | **Profilo** | http://localhost/topmusic/profilo.php |
 | **Admin Panel** | http://localhost/topmusic/Admin/ |
 | **phpMyAdmin** | http://localhost/phpmyadmin |
-| **Documentazione** | [DOCS/](./DOCS/) |
-| **API Reference** | [DOCS/DOCUMENTAZIONE.md#api-reference](./DOCS/DOCUMENTAZIONE.md#api-reference) |
-| **Quick Reference** | [DOCS/QUICK_REFERENCE.md](./DOCS/QUICK_REFERENCE.md) |
 
----
-
-## ❓ FAQ
-
-### D: Dove trovo la documentazione?
-**R**: Tutto in `DOCS/` - inizia da [`DOCS/README.md`](./DOCS/README.md)
-
-### D: Come aggiungo una nuova feature?
-**R**: Vedi [GUIDA_PRATICA.md - Aggiungere Nuova Feature](./DOCS/GUIDA_PRATICA.md#aggiungere-nuova-feature)
-
-### D: Come testo l'API?
-**R**: Vedi [GUIDA_PRATICA.md - Testing Manuale](./DOCS/GUIDA_PRATICA.md#testing-manuale)
-
-### D: Quali sono le vulnerabilità risolte?
-**R**: Vedi [SECURITY_FIXES.md](./SECURITY_FIXES.md) e [DOCS/DOCUMENTAZIONE.md#sicurezza](./DOCS/DOCUMENTAZIONE.md#sicurezza)
-
-### D: Come faccio il deploy?
-**R**: Vedi [QUICK_REFERENCE.md#deploy-checklist](./DOCS/QUICK_REFERENCE.md#-deploy-checklist)
-
-### D: PHP 7.4 è supportato?
-**R**: No, richiede **PHP 8.0+** (8.1+ consigliato)
-
----
-
-## 📊 Project Stats
-
-| Metrica | Valore |
-|---------|--------|
-| **Vulnerabilità Critiche** | 0 ✅ |
-| **SQL Injection Fixed** | 9/9 ✅ |
-| **Code Coverage** | 92% ⬆️ |
-| **API Endpoints** | 7 endpoints |
-| **Database Tables** | 4 tables |
-| **JavaScript Files** | 3 files |
-| **CSS Files** | 5 files |
-| **Total Lines of Code** | 5000+ |
-| **Documentation** | 2000+ lines |
-
----
 
 **🎉 Grazie per aver usato TOP MUSIC!**
-
-Per domande o problemi, consulta la [documentazione](./DOCS/) o apri un issue nel repository.
-
-**Versione Attuale**: 1.0 (Production-Ready)  
-**Ultimo Update**: 14 Novembre 2025  
-**Status**: ✅ Stable
