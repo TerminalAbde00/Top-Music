@@ -22,11 +22,6 @@ Una moderna piattaforma web per caricare, ascoltare e condividere musica con int
 
 ```
 📦 TOP MUSIC
-├── 📁 DOCS/                   # 📚 DOCUMENTAZIONE COMPLETA
-│   ├── README.md              # Indice docs
-│   ├── DOCUMENTAZIONE.md      # Guida completa (150+ sezioni)
-│   ├── GUIDA_PRATICA.md       # Code examples (20+ snippet)
-│   └── QUICK_REFERENCE.md     # Lookup rapido
 │
 ├── 📁 api/                    # 🔌 API RESTful sicure
 │   ├── auth.php               # Login endpoint
