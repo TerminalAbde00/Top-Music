@@ -1,0 +1,14 @@
+.buttonControl {
+    text-align-last: center;
+}
+
+.buttonControl button{
+    width: 200px;
+    font-size: 18px;
+    padding: 10px;
+    border: none;
+    background: #000;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+}

@@ -1,0 +1,10 @@
+body{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  user-select: none; /* Disabilita la selezione del testo */
+  -webkit-user-select: none; /* Supporto per Safari */
+  -moz-user-select: none; /* Supporto per Firefox */
+  -ms-user-select: none; /* Supporto per Internet Explorer/Edge */
+}

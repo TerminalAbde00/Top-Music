@@ -1,0 +1,51 @@
+.box{
+    z-index: 3;
+    background-color: #5555;
+    padding: 25px;
+    border-radius: 18px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #fff;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+    margin: 0;
+    max-width: 215px;
+}
+.coverCanzone{
+   text-align: center;
+   padding: 1px 0 1px;
+   font-size: 100px;
+   color: #2980ef;
+}
+.coverCanzone img{
+   width: 200px;
+   height:200px;
+   border-radius: 15px;
+
+}
+ .nomeCanzonePlayer{
+   text-align: center!important;
+ }
+.nomeCanzonePlayer p{
+   font-family: Arial;
+   text-transform: capitalize;
+}
+.nomeAutorePlayer{
+   text-align: center!important;
+}
+.nomeAutorePlayer p{ 
+   font-style: italic;
+   text-transform: capitalize;
+}
+
+
+p {
+ margin-top: 0;
+ margin-bottom: 1rem;
+}
+strong {
+ font-weight:bold;
+ font-size:26px;
+ line-height:22px;
+   }  

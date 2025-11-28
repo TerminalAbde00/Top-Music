@@ -1,0 +1,73 @@
+.bottoneLogin {
+    width: 70px;
+    height: 70px;
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #5555;
+    cursor: pointer;
+    position: fixed;
+    z-index: 1;
+    border-radius: 50%; /* Cambia il border-radius per renderlo un cerchio */
+    right: 7%;
+    bottom: 8%;
+    transition: transform 0.3s ease; /* Aggiungi una transizione per un effetto fluido */
+}
+
+.bottoneLogin img {
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+    margin-left: -1px;
+}
+
+.bottoneLogin:before {
+    content: '';
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 50%; /* Rendi anche il bordo luminoso circolare */
+}
+
+.bottoneLogin:active {
+    color: #5555;
+}
+
+.bottoneLogin:active:after {
+    background: transparent;
+}
+
+.bottoneLogin:hover:before {
+    opacity: 1;
+}
+
+.bottoneLogin:hover {
+    transform: scale(1.3); /* Ingrandisce il pulsante del 30% */
+}
+
+.bottoneLogin:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #5555;
+    left: 0;
+    top: 0;
+    border-radius: 50%; /* Rendi anche lo sfondo circolare */
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}

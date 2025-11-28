@@ -1,0 +1,24 @@
+.videoPlayer{
+    position: fixed;
+    background: rgb(0, 0, 0);
+    width: 100%;
+    height: 100%;
+}
+.videoPlayer video{
+    filter: blur(4px);
+}
+
+@media (min-aspect-ratio: 16/9) {
+    #myVideo {
+        width:100%;
+        height: auto;
+    }
+    
+}
+@media (max-aspect-ratio: 16/9) {
+    #myVideo {
+        width:auto;
+        height: 100%;
+    }
+    
+}
