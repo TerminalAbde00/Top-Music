@@ -1,0 +1,27 @@
+
+img/icons/.DS_Store
+DOCS/
+
+# Ignora file media in VID/ - troppo grandi per il repository
+VID/*.mp3
+VID/*.mp4
+
+# Ignora cover caricate dagli utenti (IMG/COVER)
+IMG/COVER/*.jpg
+IMG/COVER/*.jpeg
+IMG/COVER/*.png
+IMG/COVER/*.gif
+
+# Ignora file di configurazione sensibili
+.env
+.env.local
+config.local.php
+
+# Ignora node_modules e vendor se presenti
+node_modules/
+vendor/
+
+# Ignora file di sistema
+.DS_Store
+Thumbs.db
+*.log

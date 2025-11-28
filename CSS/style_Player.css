@@ -1,0 +1,194 @@
+#myBtn {
+      width: 200px;
+      font-size: 18px;
+      padding: 10px;
+      border: none;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #myBtn:hover {
+      background: #ddd;
+      color: black;
+    }
+.box{
+     z-index: 10;
+     width: 250px;
+     background-color: #5555;
+     padding: 25px;
+     border-radius: 18px;
+     transform: translate(-50%, -50%);
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     color: #fff;
+     box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
+}
+.cover{
+    text-align: center;
+    padding: 1px 0 1px;
+    font-size: 100px;
+    color: #2980ef;
+}
+#angoli {
+border-radius: 15px;
+}
+
+/* Back button base style (replaces inline styles) */
+#backback {
+    position: absolute;
+    left: 0;
+    margin: 33px;
+    z-index: 7;
+}
+#backback img {
+    width: 30px;
+    transition: transform 250ms;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+strong {
+  font-weight:bold;
+  font-size:26px;
+  line-height:22px;
+    }
+
+.text{
+    text-align: center!important;
+}
+
+.BG{
+
+position: fixed;
+width: 100%;
+height: 100%;
+z-index: 2;
+
+}
+ .black{
+    position: fixed;
+    background: black;
+    width: 100%;
+    height: 100%;
+    }
+
+
+html,body {
+    width:100vw;
+    height: 100vh;
+    margin: 0;
+}
+#myVideo {
+    position:fixed;
+    z-index: 1;
+    filter:blur(4px);
+   /* transform: scale(2);*/
+}
+#myVideo2 {
+    position:fixed;
+    z-index: 1;
+    filter:blur(4px);
+    transform: scale(2);
+}
+
+/* Stili spostati da Player.php */
+.flag-icon {
+    font-size: 18px;
+    color: #da3434;
+    padding: 3px;
+}
+
+.background {
+    display: none;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.cancel-button {
+    display: inline;
+    margin-right: 5px;
+}
+@media (min-aspect-ratio: 16/9) {
+    #myVideo {
+        width:100%;
+        height: auto;
+    }
+     #myVideo2 {
+        width:100%;
+        height: auto;
+    }
+}
+@media (max-aspect-ratio: 16/9) {
+    #myVideo {
+        width:auto;
+        height: 100%;
+    }
+    #myVideo2 {
+        width:auto;
+        height: 100%;
+    }
+}
+
+/* --- Styles moved from Player.php (previously in <style> tags) --- */
+
+/* Reset margins/padding used in Player.php */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.progress-bar {
+    bottom: -20px;
+    position: fixed;
+    width: 100%;
+    height: 25px;
+    background-color: #eeeeee80;
+    vertical-align: 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: transform 250ms;
+    z-index: 9;
+}
+.progress-bar:hover {
+    transform: translateY(-10px);
+}
+
+.now {
+    position: absolute;
+    left: 0;
+    display: inline-block;
+    height: 25px;
+    width: 0%;
+    background-color: #f7b42c;
+    background: linear-gradient(315deg, #f7b42c 0%, #fc575e 74%);
+}
+
+.segnala{
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    border: solid 3px;
+    color: #da3434;
+    z-index: 7;
+    margin: 33px;
+    right: 0;
+    cursor: pointer;
+    transition: transform 250ms;
+}
+.segnala:hover{
+    transform: scale(1.2);
+}
+
+#backback:hover{
+    transform: scale(1.2);
+}
+
+/* End moved styles */
+
