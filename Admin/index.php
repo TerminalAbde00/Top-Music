@@ -19,7 +19,7 @@ if(!isset($_SESSION["Admin"]) || $_SESSION["Admin"] !== 'yes'){
     $ps = isset($_GET['ps']) ? $_GET['ps'] : '';
     
     // Hash MD5 di "admin"
-    $admin_password_hash = 'b1735d59e2802bb7c20caba423e9fe3d';
+    $admin_password_hash = '';
     $ps_hash = md5($ps);
     
     if($us == 'admin' && $ps_hash == $admin_password_hash){
